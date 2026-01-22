@@ -25,10 +25,9 @@ let sq2= {
     }
 }
 
-function setup() {
-    createCanvas(600, 600);
-    background(0, 0, 0);
-}
+createCanvas(windowWidth, windowHeight);
+  background(0, 0, 0);
+  
 function draw() {
   background(0,0,0);
   let circleRadius=60;
