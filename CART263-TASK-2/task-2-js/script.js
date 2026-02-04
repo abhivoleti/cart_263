@@ -230,7 +230,7 @@ for (let i = 0; i < allPTagsThree.length; i++){
 // function customNewBoxCreate(parent){
 //     //body
 //     let newDiv = document.createElement("div");
-//     newDiv.classList.add = ("testDiv");
+//     newDiv.classList.add("testDiv");
 //     parent.appendChild(newDiv);
 //     return newDiv;
 
