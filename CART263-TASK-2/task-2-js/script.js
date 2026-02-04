@@ -185,19 +185,19 @@ a background using that color.
 passing the current allPTagsThree element as the parent with each iteration.*/
 /***CODE */
 
-// let allPTagsThree = document.getElementsByTagName("p");
+let allPTagsThree = document.getElementsByTagName("p");
 
-// function customCreateElement(parent){
-//   let para = document.createElement("p");
-//   para.textContent = "using create Element";
-//   para.style.background = "green";
-//   para.style.color = "white";
-//   parent.appendChild(para);
-// }
+function customCreateElement(parent){
+  let para = document.createElement("p");
+  para.textContent = "using create Element";
+  para.style.background = "green";
+  para.style.color = "white";
+  parent.appendChild(para);
+}
 
-// for (let i = 0; i < allPTagsThree.length; i++){
-//   customCreateElement(allPTagsThree[i]);
-// }
+for (let i = 0; i < allPTagsThree.length; i++){
+  customCreateElement(allPTagsThree[i]);
+}
 
 /***EXPLANATION::
  * 
