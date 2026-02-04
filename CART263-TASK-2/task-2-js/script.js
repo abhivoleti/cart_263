@@ -79,12 +79,14 @@ HTMLCollection Prototype
 
 
 /*************************************** */
-/* 5A
-/* 5B
-/* 5C //  
+/*************************************** */
+/* 5A */
+/* 5B */
+/* 5C */
 console.log(document.getElementsByTagName("h2"));
 console.log(document.getElementsByTagName("h2").length);
 console.log(document.getElementsByTagName("h2")[0].textContent);
+
 
 /***OUTPUT: 
 /* 5A: <h2> The header of this fancy page</h2>
