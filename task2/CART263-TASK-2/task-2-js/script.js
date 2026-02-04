@@ -6,7 +6,7 @@ console.log("we are a go!")
 /*** ALL ANWSERS TO BE ADDED IN THE ALLOCATED SPACE */
 /*** START PART ONE ACCESS */ 
 /* 1: all paragraph elements */
-/***CODE */
+//console.log (document.getElementsByTagName("p"));
 /***OUTPUT: 
  * 
  0
@@ -34,7 +34,7 @@ console.log("we are a go!")
 
 /*************************************** */
 /* 2: only the first paragraph element */
-/***CODE */
+// console.log (document.getElementsByTagName("p")[0]);
 /***OUTPUT: 
  * <p id="1">…</p>
  */
@@ -42,7 +42,7 @@ console.log("we are a go!")
 
 /*************************************** */
 /* 3: all elements with the class inner-container */
-/***CODE */
+// console.log(document.getElementsByClassName("inner-container"));
 /***OUTPUT: 
  * 
   0
@@ -68,30 +68,46 @@ HTMLCollection Prototype
 
 /*************************************** */
 /* 4: the last image element inside the element that has the class img-container */
-/***CODE */
-/***OUTPUT: 
- * 
- */
-
-
-/*************************************** */
-/* 5A: all h2 elements */
-/* 5B: length of the list in 5A */
-/* 5C: the text content of the first element in the list from 5A */
-/***CODE */
+// console.log(document.getElementsByClassName("img-container")[7]);
 /***OUTPUT: 
  * 
  <div class="img-container"> 
  <img class="img-image" src="task-2-images/seventeen.png">
-</div>
+</div>  
  */
+
+
+
+/*************************************** */
+/* 5A
+/* 5B
+/* 5C //  
+console.log(document.getElementsByTagName("h2"));
+console.log(document.getElementsByTagName("h2").length);
+console.log(document.getElementsByTagName("h2")[0].textContent);
+
+/***OUTPUT: 
+/* 5A: <h2> The header of this fancy page</h2>
+/* 5B: 1
+/* 5C: The header of this fancy page
 
 
 /*************************************** */
 /* 6: the element with id name parent */
-/***CODE */
+// console.log(document.getElementById("parent"));
 /***OUTPUT: 
  * 
+    <section id="parent">
+    <div class="inner-container">…</div>
+    <div class="inner-container">…</div>
+    <div class="inner-container">…</div>
+    <div class="inner-container">…</div>
+    <div class="inner-container">…</div>
+    <div class="inner-container">…</div>
+    <div class="inner-container">…</div>
+    <div class="inner-container">…</div>
+    </section>
+
  */
 
 /*************************************** */
@@ -106,26 +122,32 @@ HTMLCollection Prototype
 /*************************************** */
 /* 2: Select all elements in the HTML that have the class name content-container
  and change the background color ... of first and second ...*/
-/***CODE */
+//document.getElementsByClassName("content-container")[0].style.background = "lightpink";
+// document.getElementsByClassName("content-container")[1].style.background = "lightyellow";
 
 /*************************************** */
 /* 3: Change the src element of the first image element on the page to be ...
-/***CODE */
+// //document.getElementsByTagName("img")[0].src = "task-2-images/seven.png";
 
 /*************************************** */
 /* 4: Select the third paragraph element on the page and 
 replace the content (within the paragraph) to be an h2 element which contains the text `TEST 123`
-/***CODE */
+// document.getElementsByTagName("p")[2].innerHTML = "<h2> TEST 123 </h2>";
 
 /*************************************** */
 /* 5: Select the fourth paragraph element on the page and 
 add to the existing content an h2 element containing the text `TEST 123`
-/***CODE */
+// document.getElementsByTagName("p")[3].innerHTML += "<h2> TEST 123 </h2>";
 
 /*************************************** */
 /* 6: Select the fifth paragraph element on the page and add to the existing content 
 an img element that holds `one.png`, and add the class newStyle to said paragraph element.
+
 /***CODE */
+
+// let fifth_p = document.getElementsByTagName("p")[4];
+// fifth_p.classList.add("newStyle");
+// fifth_p.innerHTML += "<img src='task-2-images/one.png'>";
 
 
 /*************************************** */
@@ -136,6 +158,13 @@ assign the element from innerContainers variable with the same index
 (i.e. colors[0] should be allocated to the first innerContainers element, colors[1] to the second, etc ...) 
 a background using that color.
 /***CODE */
+
+// let colors = ['red','blue','green','orange'];
+// let innerContainers = document.getElementsByClassName("inner-container");
+
+// for (let i = 0; i < innerContainers.length; i++) {
+//   innerContainers[i].style.background = colors[i];
+// }
 
 /*************************************** */
 /*** END PART TWO MODIFY */ 
@@ -156,6 +185,19 @@ a background using that color.
 passing the current allPTagsThree element as the parent with each iteration.*/
 /***CODE */
 
+// let allPTagsThree = document.getElementsByTagName("p");
+
+// function customCreateElement(parent){
+//   let para = document.createElement("p");
+//   para.textContent = "using create Element";
+//   para.style.background = "green";
+//   para.style.color = "white";
+//   parent.appendChild(para);
+// }
+
+// for (let i = 0; i < allPTagsThree.length; i++){
+//   customCreateElement(allPTagsThree[i]);
+// }
 
 /***EXPLANATION::
  * 
@@ -183,8 +225,30 @@ passing the current allPTagsThree element as the parent with each iteration.*/
     otherwise lat it have the content `ODD`.*/
 
 /***CODE */
+// function customNewBoxCreate(parent){
+//     //body
+//     let newDiv = document.createElement("div");
+//     newDiv.classList.add = ("testDiv");
+//     parent.appendChild(newDiv);
+//     return newDiv;
 
 
+// }
+// let parentGrid = document.querySelector("#new-grid");
+
+// for (let x=0; x<10; x++){
+//     for (let y=0; y<10; y++){
+//         if(x%2===0){
+//         returnedDiv.style.background = "white";
+//         }
+//         else{
+//         returnedDiv.textContent = "EVEN";
+//         }
+//         let returnedDiv = customNewBoxCreate(parentGrid);
+//         returnedDiv.style.top = y*40 + "px";
+//         returnedDiv.style.left = x*40 + "px";}
+        
+//     }
 /***EXPLANATION::
  * 
  * 
@@ -206,6 +270,24 @@ passing the current allPTagsThree element as the parent with each iteration.*/
 
 /***CODE */
 
+// for (let i = 0; i < 10; i++) {
+//   for (let j = 0; j < 10; j++) {
+//     let returnedDiv = customNewBoxCreate(document.getElementById("new-grid-three"));
+//     returnedDiv.style.left = i * 40 + "px";
+//     returnedDiv.style.top = j * 40 + "px";
+
+//     if (i % 3 === 0) {
+//       returnedDiv.style.background = "red";
+//       returnedDiv.textContent = "0";
+//     } else if (i % 3 === 1) {
+//       returnedDiv.style.background = "orange";
+//       returnedDiv.textContent = "1";
+//     } else {
+//       returnedDiv.style.background = "yellow";
+//       returnedDiv.textContent = "2";
+//     }
+//   }
+// }
 
 /***EXPLANATION::
  * 
