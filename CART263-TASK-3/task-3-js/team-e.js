@@ -25,6 +25,47 @@ function setup_E() {
    
   function aniA(parentCanvas) {
     console.log("in ani-A -teamE");
+
+    parentCanvas.style.position = "relative";
+    parentCanvas.style.overflow = "hidden";
+    parentCanvas.innerHTML = ""; 
+
+    let currentY=10;
+
+    parentCanvas.addEventListener("mouseover", ()=>{
+    parentCanvas.style.backgroundColor = "#000000";
+    });
+
+    parentCanvas.addEventListener("mouseout", ()=>{
+    parentCanvas.style.backgroundColor = "white";
+    });
+    
+    parentCanvas.addEventListener("click", ()=>{
+
+      const randomColor= `rgb(
+      ${Math.floor(Math.random()* 256)},
+      ${Math.floor(Math.random()* 256)},
+      ${Math.floor(Math.random()* 256)}
+    )`;
+
+    for (let x=0; x< parentCanvas.offsetWidth; x+=50){
+      const ellipse = document.createElement("div");
+
+      ellipse.style.width = "10px";
+      ellipse.style.height = "10px";
+      ellipse.style.borderRadius = "50%";
+      ellipse.style.position = "absolute";
+      ellipse.style.left = x+ "px";
+      ellipse.style.top = currentY + "px";
+      ellipse.style.backgroundColor = randomColor;
+      
+  
+      parentCanvas.appendChild(ellipse);
+
+    }
+    currentY += 20;
+
+    });
   }
 
 
