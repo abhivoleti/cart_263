@@ -88,10 +88,12 @@ console.log(document.getElementsByTagName("h2").length);
 console.log(document.getElementsByTagName("h2")[0].textContent);
 
 
-/***OUTPUT: 
-/* 5A: <h2> The header of this fancy page</h2>
-/* 5B: 1
-/* 5C: The header of this fancy page
+/*** OUTPUT:
+ * 5A: <h2> The header of this fancy page</h2>
+ * 5B: 1
+ * 5C: The header of this fancy page
+ */
+
 
 
 /*************************************** */
@@ -187,7 +189,7 @@ a background using that color.
 passing the current allPTagsThree element as the parent with each iteration.*/
 /***CODE */
 
-let allPTagsThree = document.getElementsByTagName("p");
+let allPTagsThree = document.querySelectorAll("p");
 
 function customCreateElement(parent){
   let para = document.createElement("p");
