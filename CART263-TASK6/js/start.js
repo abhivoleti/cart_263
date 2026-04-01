@@ -13,7 +13,7 @@ function go_all_stuff() {
   videoEl.loop = true;
 
   /* ── CANVASES & CONTEXTS ── */
-  let theCanvases = document.querySelectorAll(".canvases");
+  let theCanvases = document.querySelectorAll(".canvaas");
   let theContexts = [];
   for (let i = 0; i < theCanvases.length; i++) {
     let context = theCanvases[i].getContext("2d");
