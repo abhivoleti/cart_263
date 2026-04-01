@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #181818;
+    color: #ddd;
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    padding: 22px 28px;
+}
+
+h1 {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #888;
+    margin-bottom: 22px;
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+    border-left: 3px solid #ee0055;
+    padding-left: 10px;
+}
+
+main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.board-label {
+    font-size: 0.6rem;
+    color: #555;
+    font-style: italic;
+}
+
+.button-g {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #222;
+    border: 1px solid #2d2d2d;
+    padding: 5px 10px;
+    min-height: 34px;
+    flex-wrap: wrap;
+}
+
+.button-g span {
+    font-size: 0.65rem;
+    color: #999;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.button-g input[type="number"] {
+    background: #181818;
+    border: 1px solid #3a3a3a;
+    color: #ccc;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    padding: 2px 4px;
+    width: 48px;
+    outline: none;
+}
+
+.button-g input[type="number"]:focus {
+    border-color: #ee0055;
+}
+
+.canvases {
+    width: 400px;
+    height: 300px;
+    background: #0e0e0e;
+    display: block;
+    border: 1px solid #2a2a2a;
+}
+
+#filter_button_blur, #filter_button_sepia, #filter_button_hue, #filter_button_invert {
+    font-size: 0.65rem;
+}

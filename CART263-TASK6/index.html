@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>cart263 – task 6</title>
+    <link rel="stylesheet" href="css/all_stuff.css">
+    <script src="js/VideoObj.js"></script>
+    <script src="js/FreeStyleObj.js"></script>
+    <script src="js/RectangularObj.js"></script>
+    <script src="js/CircularObj.js"></script>
+    <script src="js/DrawingBoard.js"></script>
+    <script src="js/start.js"></script>
+</head>
+
+
+    <video id="video-birds" src="videos/b1_s.mov" autoplay="autoplay" hidden></video>
+
+    <main>
+
+        <!--Circles-->
+        <div class="container">
+            <div class="button-g">
+
+            </div>
+            <canvas class="canvases" width="400" height="300" id="partA"></canvas>
+        </div>
+
+        <!--Rectangle + Microphone-->
+        <div class="container">
+            <div class="button-g">
+
+            </div>
+            <canvas class="canvases" width="400" height="300" id="partB"></canvas>
+        </div>
+
+        <!--FreeStyle Wave + Microphone-->
+        <div class="container">
+            <div class="button-g">
+
+            </div>
+            <canvas class="canvases" width="400" height="300" id="partC"></canvas>
+        </div>
+
+        <!--Video + Filters-->
+        <div class="container">
+            <div class="button-g">
+                <span id="filter_button_blur">
+                    <span>blur</span>
+                    <input id="blurnum" type="number" min="0" max="8" value="0" />
+                </span>
+                <span id="filter_button_sepia">
+                    <span>sepia</span>
+                    <input id="sepianum" type="number" min="0" max="1" step="0.1" value="0" />
+                </span>
+                <span id="filter_button_hue">
+                    <span>hue</span>
+                    <input id="huenum" type="number" min="0" max="360" value="0" />
+                </span>
+                <span id="filter_button_invert">
+                    <span>invert</span>
+                    <input id="invertnum" type="number" min="0" max="1" step="0.1" value="0" />
+                </span>
+            </div>
+            <canvas class="canvases" width="400" height="300" id="partD"></canvas>
+        </div>
+
+    </main>
+</body>
+
+</html>
