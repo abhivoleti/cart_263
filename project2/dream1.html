@@ -101,7 +101,7 @@ fadeOverlay.style.transition = "opacity 3s ease";
 // add to page
 document.body.appendChild(fadeOverlay);
 
-// trigger fade after a short delay (or call whenever you want)
+// trigger fade after a short delay 
 setTimeout(() => {
   fadeOverlay.style.opacity = "0";
 }, 300);
@@ -109,7 +109,7 @@ setTimeout(() => {
 // add to page
 document.body.appendChild(fadeOverlay);
 
-// trigger fade after a short delay (or call whenever you want)
+// trigger fade after a short delay
 setTimeout(() => {
   fadeOverlay.style.opacity = "0";
 }, 200);
@@ -208,10 +208,7 @@ const dirLight = new THREE.DirectionalLight(0xfff4e0, 1.5);
 dirLight.position.set(300, 500, 400);
 scene.add(dirLight);
 
-// ── Load GLB terrain (assets/sandbox.glb) ────────────────────────────────────
-// The model should sit with its base at Y=0 and extend into +Z (inland).
-// Adjust position/scale below if your Blender origin differs.
-// ── Character variables ───────────────────────────────────────────────────────
+
 let mixer = null;
 let characterModel = null;
 const clock = new THREE.Clock(false); // ← false = don't start automatically
@@ -301,8 +298,8 @@ new GLTFLoader().load(
       -box.min.z  // front edge of model aligns with shoreline
     );
 
-    // Optional: scale the model to match the water plane width (~4000 units)
-    // Comment this out if your model is already world-scale from Blender
+
+
     const targetWidth = 7000;
     const scaleFactor = targetWidth / size.x;
     model.scale.setScalar(scaleFactor);

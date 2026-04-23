@@ -21,7 +21,7 @@
 <body>
 
   <script>
-  // Resume audio in case autoplay was blocked
+
   window.addEventListener('load', () => {
     const bgm = window.parent.document.getElementById('bgm');
     if (bgm && bgm.paused) bgm.play();
@@ -159,7 +159,7 @@ cam.rotation.order = 'YXZ';
 // Default rotation looks straight down -Z, which is where character walks
 cam.rotation.set(0, 0, 0);
 
-// ── State ────────────────────────────────────────────────────────────────────
+
 let mixer        = null;
 let character    = null;
 const tvMixers = [];
@@ -169,8 +169,8 @@ let clock        = new THREE.Clock();
 
 setTimeout(() => { camFollowing = true; }, 2000);
 
-// ── Character loader ─────────────────────────────────────────────────────────
-// ── Draco setup ──────────────────────────────────────────────────────────────
+
+
 const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
 
@@ -183,7 +183,7 @@ loader.load(
   function(gltf){
     
 
-    // 👇 PUT IT HERE
+
     gltf.scene.traverse((child) => {
       if (child.isMesh) {
         console.log(child.material);
@@ -205,7 +205,7 @@ loader.load(
   }
 );
 
-// ── TV loader ────────────────────────────────────────────────────────────────
+
 const loader2 = new GLTFLoader();
 
 loader2.load('assets/tv1.glb', function(gltf){
