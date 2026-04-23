@@ -10,21 +10,23 @@
     canvas { display: block; }
 
 
-      #rever {
-    position: fixed;
-    top: 57%;
-    left: 55%;
-    transform: translate(-50%, -50%);
-    font-family: 'Andale Mono', monospace;
-    font-size: 96px;
-    color: white;
-text-shadow: 0 0 20px rgba(0,0,0,0.1);
-    opacity: 0;
-    transition: opacity 6s ease;
-    z-index: 9998;
-    pointer-events: none;
-    letter-spacing: 2.3em;
-  }
+.rever {
+  position: fixed;
+  top: 57%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  font-family: 'Andale Mono', monospace;
+  font-size: 96px;
+  color: white;
+  text-shadow: 0 0 20px rgba(0,0,0,0.1);
+  opacity: 0;
+  transition: opacity 6s ease;
+  z-index: 9998;
+  pointer-events: none;
+}
+
+#rever1 { letter-spacing: 2.3em; }
+#rever2, #rever3, #rever4 { letter-spacing: 0.4em; font-size: 22px; white-space: nowrap; top: 69%;left: 50%; }
 </style>
 
   </style>
@@ -57,22 +59,33 @@ window.parent.document.getElementById('frame').src = "dream3.html";
 </script>
   </head>
   <body style="background-color: black;">
-    <p style="color:white; position:absolute">1/6</p>
+
     <div id="fade"></div>
 
-    <div id="rever">Scene2</div>
+<div class="rever" id="rever1">Scene2</div>
+<div class="rever" id="rever2">Do you ever feel like your life's a dream?</div>
+<div class="rever" id="rever3">Where vivid daydreams blur into waking reality?</div>
+<div class="rever" id="rever4">And you drift without choosing where you go?</div>
 
+<script>
+  const revers = [
+  { id: 'rever1', delay: 1000,  visible: 3000 },
+  { id: 'rever2', delay: 8000,  visible: 5000 },
+  { id: 'rever3', delay: 15000, visible: 5000 },
+  { id: 'rever4', delay: 22000, visible: 5000 },
+];
 
-
-    <script>
-  const rever = document.getElementById('rever');
+revers.forEach(({ id, delay, visible }) => {
+  const el = document.getElementById(id);
   setTimeout(() => {
-    rever.style.opacity = '1';               // fade in
+    el.style.opacity = '1';
     setTimeout(() => {
-      rever.style.opacity = '0';             // fade out
-    }, 9000);                                // stays visible for 3s
-  }, 1000);                                  // starts 1s after load
+      el.style.opacity = '0';
+    }, visible);
+  }, delay);
+});
 </script>
+
   </body>
 <script type="module">
 import * as THREE from 'three';
@@ -428,6 +441,7 @@ controls.maxPolarAngle = Math.PI * 0.48;
 controls.minDistance   = 50;
 controls.maxDistance   = 2000;
 controls.update();
+controls.enabled = false;
 
 // After controls.update();
 controls.addEventListener('change', () => {

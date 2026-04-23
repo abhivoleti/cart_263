@@ -55,7 +55,7 @@ window.parent.document.getElementById('frame').src = "dream2.html";
 </script>
   </head>
   <body style="background-color: black;">
-    <p style="color:white; position:absolute">1/6</p>
+
     <div id="fade"></div>
 
     <div id="rever">Rêver</div>
@@ -323,6 +323,7 @@ controls.maxPolarAngle = Math.PI * 0.48;
 controls.minDistance = 20;
 controls.maxDistance = 5000;
 controls.update();
+controls.enabled = false;
 
 // ── Resize ────────────────────────────────────────────────────────────────────
 window.addEventListener('resize', () => {
