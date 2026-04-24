@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dream1</title>
+  <style>
+  @font-face {
+    font-family: 'Andale Mono';
+    src: url('assets/AndaleMono.ttf') format('truetype');
+  }
+
+  #rever {
+    position: fixed;
+    top: 57%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    font-family: 'Andale Mono', monospace;
+    font-size: 96px;
+    color: white;
+text-shadow: 0 0 20px rgba(0,0,0,0.1);
+    opacity: 0;
+    transition: opacity 6s ease;
+    z-index: 9998;
+    pointer-events: none;
+    letter-spacing: 2.3em;
+  }
+</style>
+
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+  }
+}
+</script>
+
+ <script>
+
+  const bgm = window.parent.document.getElementById('bgm');
+
+  window.addEventListener('load', () => {
+    bgm = window.parent.document.getElementById('bgm');
+    if (bgm && bgm.paused) bgm.play();
+  });
+
+  document.addEventListener("keydown", (event) => {
+  if (event.code === "Space") {
+    
+
+
+    setTimeout(() => { 
+
+window.parent.document.getElementById('frame').src = "dream2.html";
+    }, 200);
+  }
+
+});
+
+</script>
+  </head>
+  <body style="background-color: black;">
+
+    <div id="fade"></div>
+
+    <div id="rever">Rêver</div>
+
+    <script>
+  const rever = document.getElementById('rever');
+  setTimeout(() => {
+    rever.style.opacity = '1';               // fade in
+    setTimeout(() => {
+      rever.style.opacity = '0';             // fade out
+    }, 9000);                                // stays visible for 3s
+  }, 1000);                                  // starts 1s after load
+</script>
+  </body>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls }      from 'three/addons/controls/OrbitControls.js';
+import { Water }              from 'three/addons/objects/Water.js';
+import { Sky }                from 'three/addons/objects/Sky.js';
+import { GLTFLoader }         from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { EffectComposer }     from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass }         from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass }    from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+// fadeout 
+
+  const fadeOverlay=document.getElementById("fade"); 
+
+fadeOverlay.style.position = "fixed";
+fadeOverlay.style.top = "0";
+fadeOverlay.style.left = "0";
+fadeOverlay.style.width = "100vw";
+fadeOverlay.style.height = "100vh";
+
+fadeOverlay.style.background = "white";
+fadeOverlay.style.opacity = "1";
+fadeOverlay.style.pointerEvents = "none";
+fadeOverlay.style.zIndex = "9999";
+
+fadeOverlay.style.transition = "opacity 3s ease";
+
+// add to page
+document.body.appendChild(fadeOverlay);
+
+// trigger fade after a short delay 
+setTimeout(() => {
+  fadeOverlay.style.opacity = "0";
+}, 300);
+
+// add to page
+document.body.appendChild(fadeOverlay);
+
+// trigger fade after a short delay
+setTimeout(() => {
+  fadeOverlay.style.opacity = "0";
+}, 200);
+
+// ── Sun parameters — tweak these to reposition the sun ───────────────────────
+const SUN_PARAMS = {
+  elevation: 2.39,      // degrees above horizon (0 = horizon, 90 = overhead)
+  azimuth:   160,    // degrees around horizon (0 = north, 180 = south)
+  exposure:  0.96,    // renderer tone-mapping exposure
+};
+
+// ── Renderer ──────────────────────────────────────────────────────────────────
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = SUN_PARAMS.exposure;
+document.body.appendChild(renderer.domElement);
+
+// ── Scene & Camera ────────────────────────────────────────────────────────────
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.5, 60000);
+camera.position.set(-10900,  -100000 , 19390);
+console.log(camera.position.y);
+camera.lookAt(0, 115, -1800);
+
+// ── Bloom post-processing ─────────────────────────────────────────────────────
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(
+  new THREE.Vector2(window.innerWidth, window.innerHeight),
+  .6,   // strength
+  1.45,   // radius
+  1   // threshold
+);
+composer.addPass(bloom);
+
+// ── Sky ───────────────────────────────────────────────────────────────────────
+const sky = new Sky();
+sky.scale.setScalar(10000);
+scene.add(sky);
+const skyU = sky.material.uniforms;
+skyU['turbidity'].value      = 4;
+skyU['rayleigh'].value       = 7.4;
+skyU['mieCoefficient'].value = 0.005;
+skyU['mieDirectionalG'].value = 0.781;
+
+const sun = new THREE.Vector3();
+const pmrem = new THREE.PMREMGenerator(renderer);
+let envRT;
+
+function updateSun() {
+  const phi   = THREE.MathUtils.degToRad(90- SUN_PARAMS.elevation);
+  const theta = THREE.MathUtils.degToRad(SUN_PARAMS.azimuth);
+  sun.setFromSphericalCoords(1, phi, theta);
+
+  skyU['sunPosition'].value.copy(sun);
+  water.material.uniforms['sunDirection'].value.copy(sun).normalize();
+
+  if (envRT) envRT.dispose();
+  const envScene = new THREE.Scene();
+  envScene.add(sky.clone());
+  envRT = pmrem.fromScene(envScene);
+  scene.environment = envRT.texture;
+
+  renderer.toneMappingExposure = SUN_PARAMS.exposure;
+}
+
+// ── Water ─────────────────────────────────────────────────────────────────────
+// Shoreline at Z = 0. Ocean extends to Z = -12000.
+const WATER_D = 120000;
+const water = new Water(
+  new THREE.PlaneGeometry(122000, WATER_D),
+  {
+    textureWidth: 112, textureHeight: 112,
+    waterNormals: new THREE.TextureLoader().load(
+      'https://threejs.org/examples/textures/waternormals.jpg',
+      t => { t.wrapS = t.wrapT = THREE.RepeatWrapping; }
+    ),
+    sunDirection: sun.clone().normalize(),
+    sunColor: 0x22ffff,
+    waterColor: 0x51b978,
+    distortionScale: 4.7,
+    fog: false,
+  }
+);
+water.rotation.x = -Math.PI / 2;
+water.position.set(110, -190, -WATER_D / 2); // near edge exactly at Z=0
+scene.add(water);
+
+updateSun(); // now safe — water exists
+
+// ── Lighting ──────────────────────────────────────────────────────────────────
+scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+const dirLight = new THREE.DirectionalLight(0xfff4e0, 1.5);
+dirLight.position.set(300, 500, 400);
+scene.add(dirLight);
+
+
+let mixer = null;
+let characterModel = null;
+const clock = new THREE.Clock(false); // ← false = don't start automatically
+const WALK_SPEED = 0.78;
+
+// ── Load char4.glb ────────────────────────────────────────────────────────────
+// ── Draco setup ──────────────────────────────────────────────────────────────
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+
+const loader = new GLTFLoader();
+loader.setDRACOLoader(dracoLoader);
+loader.load(
+  'assets/char8.glb',
+  gltf => {
+    const model = gltf.scene;
+    model.traverse(child => {
+  console.log(child.type, child.name);
+});
+    console.log('Animations found:', gltf.animations.map(a => a.name));
+    model.rotation.y = Math.PI*-1.12;
+
+    const box = new THREE.Box3().setFromObject(model);
+    const center = box.getCenter(new THREE.Vector3());
+    const size   = box.getSize(new THREE.Vector3());
+
+    model.position.set(-center.x, -box.min.y, -box.min.z);
+
+    const targetWidth = 199;
+    const scaleFactor = targetWidth / size.x;
+    model.scale.setScalar(scaleFactor);
+
+    const box2 = new THREE.Box3().setFromObject(model);
+    
+    model.position.y = -box2.min.y * 1.0001;
+    model.position.z = -box2.min.z / 212;
+
+  if (gltf.animations.length > 0) {
+  mixer = new THREE.AnimationMixer(model);
+  const clip = THREE.AnimationClip.findByName(gltf.animations, 'rigAction');
+  const action = mixer.clipAction(clip);
+  action.reset();
+  action.setLoop(THREE.LoopRepeat, Infinity);
+  action.timeScale = 1;
+  action.enabled = true;
+  action.play();
+  console.log('Playing:', clip.name, '| Duration:', clip.duration);
+}
+
+    characterModel = model;
+    clock.start(); // ← start clock only when model is ready
+    scene.add(model);
+  },
+  xhr => console.log(`char4.glb: ${(xhr.loaded / xhr.total * 100).toFixed(0)}% loaded`),
+  err => console.error('GLB load error:', err)
+);
+// ── Render loop ───────────────────────────────────────────────────────────────
+// function animate() {
+//   requestAnimationFrame(animate);
+//   const delta = clock.getDelta();
+
+//   if (mixer) mixer.update(delta);
+//   if (characterModel) characterModel.position.z -= WALK_SPEED;
+
+//   water.material.uniforms['time'].value += 1 / 60;
+//   controls.update();
+//   composer.render();
+// }
+// animate();
+
+new GLTFLoader().load(
+  'assets/sandbox2.glb',
+  gltf => {
+    const model = gltf.scene;
+
+     model.rotation.y = Math.PI ;
+
+    // Auto-fit: center the model on XZ, sit it on Y=0
+    const box = new THREE.Box3().setFromObject(model);
+    const center = box.getCenter(new THREE.Vector3());
+    const size   = box.getSize(new THREE.Vector3());
+
+    // Shift so base sits at y=0, centered on X, and front edge at Z=0
+    model.position.set(
+      -center.x*27,
+      -box.min.y,
+      -box.min.z  // front edge of model aligns with shoreline
+    );
+
+
+
+    const targetWidth = 7000;
+    const scaleFactor = targetWidth / size.x;
+    model.scale.setScalar(scaleFactor);
+
+    // Re-apply position after scale
+    const box2 = new THREE.Box3().setFromObject(model);
+    model.position.y = -box2.min.y/19999;
+    model.position.z = -box2.min.z*1;
+
+    scene.add(model);
+  },
+  xhr => console.log(`sandbox.glb: ${(xhr.loaded / xhr.total * 100).toFixed(0)}% loaded`),
+  err => console.error('GLB load error:', err)
+);
+
+// ── OrbitControls ─────────────────────────────────────────────────────────────
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.target.set(0, -40, -100);
+controls.maxPolarAngle = Math.PI * 0.48;
+controls.minDistance = 20;
+controls.maxDistance = 5000;
+controls.update();
+controls.enabled = false;
+
+// ── Resize ────────────────────────────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  composer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ── Render loop ───────────────────────────────────────────────────────────────
+function animate() {
+  requestAnimationFrame(animate);
+  const delta = clock.getDelta();
+
+  if (mixer) mixer.update(delta);
+  if (characterModel) characterModel.position.z -= WALK_SPEED;
+
+  water.material.uniforms['time'].value += 1 / 60;
+  controls.update();
+  composer.render();
+}
+animate();
+</script>
+</body>
+</html>
