@@ -39,6 +39,13 @@ text-shadow: 0 0 20px rgba(0,0,0,0.1);
 
  <script>
 
+  const bgm = window.parent.document.getElementById('bgm');
+
+  window.addEventListener('load', () => {
+    bgm = window.parent.document.getElementById('bgm');
+    if (bgm && bgm.paused) bgm.play();
+  });
+
   document.addEventListener("keydown", (event) => {
   if (event.code === "Space") {
     
@@ -114,14 +121,14 @@ setTimeout(() => {
   fadeOverlay.style.opacity = "0";
 }, 200);
 
-// ── Sun parameters — tweak these to reposition the sun ───────────────────────
+// sun parameters
 const SUN_PARAMS = {
   elevation: 2.39,      // degrees above horizon (0 = horizon, 90 = overhead)
   azimuth:   160,    // degrees around horizon (0 = north, 180 = south)
   exposure:  0.96,    // renderer tone-mapping exposure
 };
 
-// ── Renderer ──────────────────────────────────────────────────────────────────
+// renderer
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -129,14 +136,14 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = SUN_PARAMS.exposure;
 document.body.appendChild(renderer.domElement);
 
-// ── Scene & Camera ────────────────────────────────────────────────────────────
+// camera 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.5, 60000);
 camera.position.set(-10900,  -100000 , 19390);
 console.log(camera.position.y);
 camera.lookAt(0, 115, -1800);
 
-// ── Bloom post-processing ─────────────────────────────────────────────────────
+// bloom composer
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 const bloom = new UnrealBloomPass(
@@ -147,7 +154,7 @@ const bloom = new UnrealBloomPass(
 );
 composer.addPass(bloom);
 
-// ── Sky ───────────────────────────────────────────────────────────────────────
+// sky parameters
 const sky = new Sky();
 sky.scale.setScalar(10000);
 scene.add(sky);
@@ -178,7 +185,7 @@ function updateSun() {
   renderer.toneMappingExposure = SUN_PARAMS.exposure;
 }
 
-// ── Water ─────────────────────────────────────────────────────────────────────
+// water 
 // Shoreline at Z = 0. Ocean extends to Z = -12000.
 const WATER_D = 120000;
 const water = new Water(
@@ -202,7 +209,7 @@ scene.add(water);
 
 updateSun(); // now safe — water exists
 
-// ── Lighting ──────────────────────────────────────────────────────────────────
+// lighting
 scene.add(new THREE.AmbientLight(0xffffff, 0.6));
 const dirLight = new THREE.DirectionalLight(0xfff4e0, 1.5);
 dirLight.position.set(300, 500, 400);
@@ -214,8 +221,8 @@ let characterModel = null;
 const clock = new THREE.Clock(false); // ← false = don't start automatically
 const WALK_SPEED = 0.78;
 
-// ── Load char4.glb ────────────────────────────────────────────────────────────
-// ── Draco setup ──────────────────────────────────────────────────────────────
+// char4
+
 const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
 
@@ -265,7 +272,7 @@ loader.load(
   xhr => console.log(`char4.glb: ${(xhr.loaded / xhr.total * 100).toFixed(0)}% loaded`),
   err => console.error('GLB load error:', err)
 );
-// ── Render loop ───────────────────────────────────────────────────────────────
+
 // function animate() {
 //   requestAnimationFrame(animate);
 //   const delta = clock.getDelta();
@@ -315,7 +322,7 @@ new GLTFLoader().load(
   err => console.error('GLB load error:', err)
 );
 
-// ── OrbitControls ─────────────────────────────────────────────────────────────
+// orbits controls
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.target.set(0, -40, -100);
@@ -325,7 +332,7 @@ controls.maxDistance = 5000;
 controls.update();
 controls.enabled = false;
 
-// ── Resize ────────────────────────────────────────────────────────────────────
+// resizing
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -333,7 +340,7 @@ window.addEventListener('resize', () => {
   composer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// ── Render loop ───────────────────────────────────────────────────────────────
+// animation loop
 function animate() {
   requestAnimationFrame(animate);
   const delta = clock.getDelta();

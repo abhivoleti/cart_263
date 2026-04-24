@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>DREAMS</title>
+    <style>
+      body { margin: 0; }
+    </style>
+
+<style rel="stylesheet" href="style.css"></style>
+  <script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
+        "postprocessing": "https://unpkg.com/postprocessing@6.38.2/build/index.js"
+
+  }
+}
+</script>
+
+<script src="https://threejs.org/build/three.min.js"></script>
+<!--<script type="module" src="rayCastTest.js"></script> --> 
+<!-- <script type="module" src="lightingOne.js"></script> --> 
+ <script type="module" src="scene5.js" id="appScript"></script>
+  <script src="https://unpkg.com/tone@latest/build/Tone.js"></script>
+
+
+ <script>
+  const fadeOverlay=document.getElementById("fade"); 
+  document.addEventListener("keydown", (event) => {
+
+    if (event.code === "Space") {
+    window.location.href = "scene6.html";
+  }
+}); 
+
+let playing = false; 
+
+async function playMelody() {
+
+  // FX
+  const reverb = new Tone.Reverb({
+    decay: 5,
+    wet: 0.5
+  }).toDestination();
+
+  // sawtooth pad synth 
+  const chordSynth = new Tone.PolySynth(Tone.Synth, {
+    oscillator: { type: "sawtooth" },
+    envelope: {
+      attack: 1.5,
+      decay: 0.5,
+      sustain: 0.4,
+      release:1.5
+    },
+    volume: -12
+  }).connect(reverb);
+
+  //arpeggio sine 
+  const arpSynth = new Tone.Synth({
+    oscillator: { type: "sine" },
+    envelope: {
+      attack: 0.01,
+      decay: 0.3,
+      sustain: 0.1,
+      release: 0.3
+    }
+  }).connect(reverb);
+
+  // chord progression (i googled these)
+  const chords = [
+    ["C4", "E4", "G4", "B4"],   // Cmaj7
+    ["A3", "C4", "E4", "G4"],   // Am7
+    ["F3", "A3", "C4", "E4"],   // Fmaj7
+    ["G3", "B3", "D4", "F4"]    // G7
+  ];
+
+  let currentChord = chords[0];
+
+  // chords, pad 
+  const chordLoop = new Tone.Loop((time) => {
+    currentChord = chords[Math.floor(Math.random() * chords.length)];
+
+    chordSynth.triggerAttackRelease(currentChord, "2m", time);
+  }, "2m").start(0);
+
+  // arppegio 
+  const arpLoop = new Tone.Loop((time) => {
+    const note = currentChord[Math.floor(Math.random() * currentChord.length)];
+
+    // optional: jump up an octave sometimes
+    const octaveUp = Math.random() > 0.5;
+    const finalNote = octaveUp
+      ? Tone.Frequency(note).transpose(12)
+      : note;
+
+    arpSynth.triggerAttackRelease(finalNote, "8n", time);
+  }, "8n").start(0);
+
+  Tone.Transport.start();
+}
+
+// click to start audio
+document.addEventListener("click", async () => {
+  if (!playing) {
+    await Tone.start();
+    playMelody();
+    playing = true;
+  }
+});
+
+ </script> 
+  </head>
+  <body style="background-color: black;">
+    <p style="color:white; font-family: 'Andale Mono', monospace ;  position:absolute">5/6 <br> (Click screen for music)</p>
+    <div id="fade"></div>
+    <div style="position:absolute; display:flex; justify-content:center; align-items:flex-start; width:100%; height:100%;">
+    <h1 style="color:white;  font-family: 'Andale Mono', monospace ; font-size:20px; margin-top:80vh">
+        The wave of romantic nostolgia, high off the feeling. <br>
+        [Stay a while]
+    </h1>
+</div>
+  </body>
+</html>

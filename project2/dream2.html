@@ -26,7 +26,7 @@
 }
 
 #rever1 { letter-spacing: 2.3em; }
-#rever2, #rever3, #rever4 { letter-spacing: 0.4em; font-size: 22px; white-space: nowrap; top: 69%;left: 50%; }
+#rever2, #rever3, #rever4 { letter-spacing: 0.4em; font-size: 22px; white-space: nowrap; top: 75%;left: 50%; }
 </style>
 
   </style>
@@ -43,11 +43,15 @@
 
  <script>
 
+const bgm = window.parent.document.getElementById('bgm');
+
+  window.addEventListener('load', () => {
+    bgm = window.parent.document.getElementById('bgm');
+    if (bgm && bgm.paused) bgm.play();
+  });
+  
   document.addEventListener("keydown", (event) => {
   if (event.code === "Space") {
-    
-
-
     setTimeout(() => { 
        
 window.parent.document.getElementById('frame').src = "dream3.html";
@@ -121,14 +125,14 @@ setTimeout(() => {
   fadeOverlay.style.opacity = "0";
 }, 200);
 
-// ── Sun parameters ────────────────────────────────────────────────────────────
+// Sun parameters
 const SUN_PARAMS = {
   elevation: 16,
   azimuth:   180,
   exposure:  .2,
 };
 
-// ── Renderer ──────────────────────────────────────────────────────────────────
+// Renderer 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -137,14 +141,14 @@ renderer.toneMappingExposure = SUN_PARAMS.exposure;
 renderer.shadowMap.enabled = true;
 document.body.appendChild(renderer.domElement);
 
-// ── Scene & Camera ────────────────────────────────────────────────────────────
+//  Scene & Camera 
 const scene  = new THREE.Scene();
 scene.fog    = new THREE.FogExp2(0x90c060, 0.000901);
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 10000);
 camera.position.set(-272, 160, 450);
 camera.lookAt(0, 40, 0);
 
-// ── Bloom ─────────────────────────────────────────────────────────────────────
+//Bloom
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 composer.addPass(new UnrealBloomPass(
@@ -152,7 +156,7 @@ composer.addPass(new UnrealBloomPass(
   0.4, 0.04, 0.9
 ));
 
-// ── Sky ───────────────────────────────────────────────────────────────────────
+// Sky 
 const sky = new Sky();
 sky.scale.setScalar(10000);
 scene.add(sky);
@@ -180,14 +184,14 @@ function updateSun() {
 }
 updateSun();
 
-// ── Lighting ──────────────────────────────────────────────────────────────────
+//Lighting 
 scene.add(new THREE.AmbientLight(0xc8e8a0, 0.9));
 const dirLight = new THREE.DirectionalLight(0xffe8a0, 1.8);
 dirLight.position.set(300, 200, 100);
 dirLight.castShadow = true;
 scene.add(dirLight);
 
-// ── Ground ────────────────────────────────────────────────────────────────────
+//ground
 const ground = new THREE.Mesh(
   new THREE.PlaneGeometry(10000, 10000, 10, 10),
   new THREE.MeshLambertMaterial({ color: 0x2a5010 })
@@ -195,7 +199,7 @@ const ground = new THREE.Mesh(
 ground.rotation.x = -Math.PI / 2;
 ground.receiveShadow = true;
 
-// Subtle height variation
+// height variation
 const gPos = ground.geometry.attributes.position;
 for (let i = 0; i < gPos.count; i++) {
   const x = gPos.getX(i);
@@ -210,7 +214,7 @@ gPos.needsUpdate = true;
 ground.geometry.computeVertexNormals();
 scene.add(ground);
 
-// ── Procedural Grass ──────────────────────────────────────────────────────────
+// grass blades
 const BLADE_COUNT  = 800000;
 const BLADE_SEGS   = 5;
 const BLADE_VERTS  = (BLADE_SEGS + 1) * 2;
@@ -234,7 +238,7 @@ for (let b = 0; b < BLADE_COUNT; b++) {
   const radius = Math.sqrt(Math.random()) * SPREAD;
   const bx     = Math.cos(angle) * radius;
   const bz     = Math.sin(angle) * radius;
-  const height = 15 + Math.random() * 25;   // scaled to match your scene
+  const height = 15 + Math.random() * 25;  
   const width  = 1.5 + Math.random() * 2.0;
   const lean   = (Math.random() - 0.5) * 5;
   const phase  = Math.random() * Math.PI * 2;
@@ -360,7 +364,7 @@ const grassMat = new THREE.ShaderMaterial({
 scene.add(new THREE.Mesh(geo, grassMat));
 
 
-// ── Character ─────────────────────────────────────────────────────────────────
+// character
 let mixer = null;
 let characterModel = null;
 const clock = new THREE.Clock(false);
@@ -432,7 +436,7 @@ model.traverse(child => {
   err => console.error('GLB load error:', err)
 );
 
-// ── OrbitControls ─────────────────────────────────────────────────────────────
+// orbital controls
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
@@ -449,7 +453,7 @@ controls.addEventListener('change', () => {
   console.log('Camera target:', controls.target.x.toFixed(1), controls.target.y.toFixed(1), controls.target.z.toFixed(1));
 });
 
-// Press L to log light position
+
 window.addEventListener('keydown', e => {
   if (e.key === 'l' || e.key === 'L') {
     console.log('DirLight pos:', dirLight.position.x.toFixed(1), dirLight.position.y.toFixed(1), dirLight.position.z.toFixed(1));
@@ -458,7 +462,7 @@ window.addEventListener('keydown', e => {
   }
 });
 
-// ── Resize ────────────────────────────────────────────────────────────────────
+// resize 
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -466,7 +470,7 @@ window.addEventListener('resize', () => {
   composer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// ── Animate ───────────────────────────────────────────────────────────────────
+// animation loop 
 function animate() {
   requestAnimationFrame(animate);
   const delta = clock.getDelta();

@@ -44,10 +44,22 @@ text-shadow: 0 0 20px rgba(0,0,0,0.1);
 
   <script>
 
-  window.addEventListener('load', () => {
     const bgm = window.parent.document.getElementById('bgm');
+
+  window.addEventListener('load', () => {
+    bgm = window.parent.document.getElementById('bgm');
     if (bgm && bgm.paused) bgm.play();
   });
+
+  document.addEventListener("keydown", (event) => {
+
+    if (event.code === "Space") {
+    if (bgm && !bgm.paused) {
+      bgm.pause();
+    }
+    window.location.href = "scene4.html";
+    }
+}); 
 </script>
 <div id="wrap">
   <canvas id="c"></canvas>
@@ -63,14 +75,10 @@ text-shadow: 0 0 20px rgba(0,0,0,0.1);
 </script>
   </head>
   <body style="background-color: black;">
-
+    <p style="color:white; position:absolute">1/6</p>
     <div id="fade"></div>
 
     <div id="rever">Scene3</div>
-    <div id="rever">Do you ever feel like your life’s a dream?</div>
-    <div id="rever">Where vivid daydreams blur into waking reality?</div>
-    <div id="rever">And you drift without choosing where you go?</div>
-
 
 
 
@@ -80,7 +88,7 @@ text-shadow: 0 0 20px rgba(0,0,0,0.1);
     rever.style.opacity = '1';               // fade in
     setTimeout(() => {
       rever.style.opacity = '0';             // fade out
-    }, 6000);                                // stays visible for 3s
+    }, 9000);                                // stays visible for 3s
   }, 1000);                                  // starts 1s after load
 </script>
 
@@ -115,7 +123,7 @@ function resize(){
 resize();
 window.addEventListener('resize', resize);
 
-// ── Lights ──────────────────────────────────────────────────────────────────
+// lights
 scene.add(new THREE.AmbientLight(0xffffff, 1.15));
 
 const ambient = new THREE.AmbientLight(0xffffff, 0.25);
@@ -124,7 +132,7 @@ scene.add(ambient);
 const dl = new THREE.DirectionalLight(0xffffff, 0.6);
 dl.position.set(2, 4, 3);
 scene.add(dl);
-// ── Room ────────────────────────────────────────────────────────────────────
+// room grid
 const ROOM_LEN = 40;
 const TILE     = 1.5;
 const HALF     = 6;
@@ -187,7 +195,7 @@ for(let y = -HALF/2; y <= HALF/2; y += TILE){
   ]), ewMat));
 }
 
-// ── Constants ────────────────────────────────────────────────────────────────
+// character+ camera+ walking parameters
 const WALK_SPEED   = 0.58;
 const CHAR_START_Z = -24;
 const CHAR_STOP_Z  = -(ROOM_LEN);
@@ -196,10 +204,10 @@ const CHAR_X       = 1.9;
 const CAM_OFFSET_Z = 12.2;
 const CAM_Y        = 0;
 
-// Pre-position camera directly behind where the character will spawn
+// character spawn pos
 cam.position.set(0, CAM_Y, CHAR_START_Z + CAM_OFFSET_Z);
 cam.rotation.order = 'YXZ';
-// Default rotation looks straight down -Z, which is where character walks
+// camera fixed pos
 cam.rotation.set(0, 0, 0);
 
 
@@ -252,7 +260,6 @@ loader.load(
 const loader2 = new GLTFLoader();
 
 loader2.load('assets/tv1.glb', function(gltf){
-
     const tv = gltf.scene;
 
 gltf.scene.traverse((child) => {
@@ -279,7 +286,7 @@ gltf.scene.traverse((child) => {
   err => console.error('tv.glb:', err)
 );
 
-// ── Mouse / touch look ───────────────────────────────────────────────────────
+// camera controls
 let yaw = 0, pitch = 0;
 let isDrag = false, lx = 0, ly = 0;
 
@@ -304,7 +311,7 @@ wrap.addEventListener('touchmove', e=>{
   tx2=e.touches[0].clientX; ty2=e.touches[0].clientY;
 },{passive:false});
 
-// ── Animate ──────────────────────────────────────────────────────────────────
+// animation loop
 function animate(){
   requestAnimationFrame(animate);
   const delta = clock.getDelta();
