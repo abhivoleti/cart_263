@@ -11,9 +11,24 @@
   </style>
 </head>
 <body>
-  <audio id="bgm" src="assets/mlbuch.mp3" autoplay loop></audio>
-  <script>
-  document.getElementById('bgm').volume = 0.1;
+<audio id="bgm" src="assets/mlbuch.mp3" loop></audio>
+<script>
+  const bgm = document.getElementById('bgm');
+  bgm.volume = 0.1;
+
+// click  or keydown to play
+  const tryPlay = () => {
+    bgm.play().catch(() => {});
+    document.removeEventListener('click', tryPlay);
+    document.removeEventListener('keydown', tryPlay);
+  };
+
+
+  bgm.play().catch(() => {
+// if autoplay fails, wait for user interaction
+    document.addEventListener('click', tryPlay);
+    document.addEventListener('keydown', tryPlay);
+  });
 </script>
   <iframe id="frame" name="content" src="dream1.html"></iframe>
 </body>
